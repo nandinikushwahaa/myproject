@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <section id="header">
+      <a href="index.html"
+        ><img src="shopping-removebg-preview.png" class="logo" alt="Logo"
+      /></a>
+
+      <div>
+        <ul id="navbar">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li>
+            <a class="active" href="cart.html"
+              ><i class="fa-solid fa-cart-shopping"></i
+            ></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="page-header" class="about-header">
+      <h2>#Let's_talk</h2>
+      <p>LEAVE A MESSAGE,we love to hear from you</p>
+    </section>
+    <section id="cart" class="section-p1">
+      <table width="100%">
+        <thead>
+          <tr>
+            <td>Remove</td>
+            <td>Image</td>
+            <td>Product</td>
+            <td>Price</td>
+            <td>Quantity</td>
+            <td>Subtotal</td>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+      </table>
+    </section>
+
+    <section id="cart-add" class="section-p1">
+      <div id="subtotal">
+        <h3>Cart Totals</h3>
+        <table>
+          <tr>
+            <td>Cart Subtotal</td>
+            <td>Rs.<span id="cart-total">0.00</span></td>
+          </tr>
+          <tr>
+            <td>Shipping</td>
+            <td>Free</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td>Rs.<span id="cart-total">0.00</span></td>
+          </tr>
+        </table>
+        <button class="normal" onclick="checkout()">Proceed to Checkout</button>
+      </div>
+    </section>
+    <footer class="section-p1">
+      <div class="col">
+        <img class="logo" src="img/logo.png" alt="" />
+        <h4>Contact</h4>
+        <p>
+          <strong>Address: </strong> panvel, wavanje,enkay garden ,ziniya 8,004
+        </p>
+        <p><strong>Phone:</strong> (+91) 81 0489 9602</p>
+        <p><strong>Hours:</strong> 10:00-18:00, Mon-Sat</p>
+        <div class="follow">
+          <h4>Follow us</h4>
+          <div class="icon">
+            <a href="https://www.facebook.com/"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="https://in.pinterest.com/"
+              ><i class="fab fa-pinterest-p"></i
+            ></a>
+            <a href="https://www.youtube.com/"
+              ><i class="fab fa-youtube"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <h4>About</h4>
+        <a href="#">About Us</a>
+        <a href="#">Delivery Information</a>
+        <a href="#">Privacy Plolicy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Contact us</a>
+      </div>
+
+      <div class="col">
+        <h4>My Account</h4>
+        <a href="#">Sign In</a>
+        <a href="#">View Cart</a>
+        <a href="#">My Wishlist</a>
+        <a href="#">Track My Order</a>
+        <a href="#">Help</a>
+      </div>
+
+      <div class="col install">
+        <h4>Install App</h4>
+        <p>From App Store or Google Play</p>
+        <div class="row">
+          <img src="apple.jpeg" alt="" />
+          <img src="google.png" alt="" />
+        </div>
+        <p>Secured Payment Gateways</p>
+        <img src="visa.webp" alt="" />
+      </div>
+      <div class="copyright">
+        <p>© 2021, Tech2 etc HTML CSS Ecommerce Template</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
