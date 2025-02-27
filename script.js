@@ -1,102 +1,152 @@
-document.addEventListener("DOMContentLoaded", function () {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+document.addEventListener("DOMContentLoaded", () => {
+  loadCartItems();
 
-  // Function to render the cart
-  function renderCart() {
-    let cartTable = document.getElementById("cart-items");
-    let cartSubtotal = document.getElementById("cart-subtotal");
-    let cartTotal = document.getElementById("cart-total");
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    button.addEventListener("click", handleAddToCart, { once: true });
+  });
+});
 
-    if (!cartTable) return;
+// Function to handle adding item to cart
+async function handleAddToCart(event) {
+  event.preventDefault();
 
-    cartTable.innerHTML = "";
+  const button = event.currentTarget;
+  const product = button.closest(".pro");
+  if (!product) return;
+
+  const productId = product.getAttribute("data-id");
+  const productName = product.getAttribute("data-name");
+  const productPrice = parseFloat(product.getAttribute("data-price"));
+  const productImage = product.getAttribute("data-image");
+
+  if (!productId || !productName || isNaN(productPrice) || !productImage) {
+    console.error("Invalid product data");
+    return;
+  }
+
+  const cartItem = {
+    id: productId,
+    name: productName,
+    price: productPrice,
+    image: productImage,
+    quantity: 1,
+  };
+
+  try {
+    let response = await fetch("http://localhost:5000/cart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cartItem),
+    });
+
+    let data = await response.json();
+    alert(`${productName} added to cart!`);
+    loadCartItems();
+  } catch (error) {
+    console.error("Error adding item to cart:", error);
+  }
+}
+
+// Function to load cart items from MongoDB
+async function loadCartItems() {
+  try {
+    let response = await fetch("http://localhost:5000/cart");
+    let cart = await response.json();
+
+    const cartItemsContainer = document.querySelector("#cart-items");
+    const cartSubtotal = document.querySelector("#cart-subtotal");
+    const cartTotal = document.querySelector("#cart-total");
+
+    if (!cartItemsContainer || !cartSubtotal || !cartTotal) return;
+
+    cartItemsContainer.innerHTML = "";
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML =
+        "<tr><td colspan='6'>Your cart is empty.</td></tr>";
+      cartSubtotal.innerText = "0.00";
+      cartTotal.innerText = "0.00";
+      return;
+    }
+
     let total = 0;
+    cart.forEach((item) => {
+      total += item.price * item.quantity;
 
-    cart.forEach((item, index) => {
-      // Ensure price is valid
-      let price = item.price && !isNaN(item.price) ? parseFloat(item.price) : 0;
-      let quantity = item.quantity && !isNaN(item.quantity) ? item.quantity : 1;
-
-      let row = document.createElement("tr");
-      row.innerHTML = `
-        <td><button class="remove-item" data-index="${index}">X</button></td>
+      const cartItemRow = document.createElement("tr");
+      cartItemRow.innerHTML = `
+        <td><button class="remove" data-id="${item.id}">❌</button></td>
         <td><img src="${item.image}" alt="${item.name}" width="50"></td>
         <td>${item.name}</td>
-        <td>Rs.${price.toFixed(2)}</td>
-        <td><input type="number" value="${quantity}" data-index="${index}" min="1"></td>
-        <td>Rs.${(price * quantity).toFixed(2)}</td>
+        <td>Rs. ${item.price.toFixed(2)}</td>
+        <td>
+          <button class="decrease" data-id="${item.id}">-</button> 
+          <span>${item.quantity}</span>
+          <button class="increase" data-id="${item.id}">+</button>
+        </td>
+        <td>Rs. ${(item.price * item.quantity).toFixed(2)}</td>
       `;
-      cartTable.appendChild(row);
-      total += price * quantity;
+      cartItemsContainer.appendChild(cartItemRow);
     });
 
-    // Update totals
-    cartSubtotal.textContent = total.toFixed(2);
-    cartTotal.textContent = total.toFixed(2);
+    cartSubtotal.innerText = total.toFixed(2);
+    cartTotal.innerText = total.toFixed(2);
+
+    document
+      .querySelectorAll(".increase")
+      .forEach((button) => button.addEventListener("click", updateQuantity));
+    document
+      .querySelectorAll(".decrease")
+      .forEach((button) => button.addEventListener("click", updateQuantity));
+    document
+      .querySelectorAll(".remove")
+      .forEach((button) => button.addEventListener("click", removeItem));
+  } catch (error) {
+    console.error("Error loading cart:", error);
+  }
+}
+
+// Function to update quantity in MongoDB
+async function updateQuantity(event) {
+  const productId = event.target.getAttribute("data-id");
+  let response = await fetch(`http://localhost:5000/cart`);
+  let cart = await response.json();
+
+  let item = cart.find((item) => item.id === productId);
+  if (!item) return;
+
+  if (event.target.classList.contains("increase")) {
+    item.quantity += 1;
+  } else if (event.target.classList.contains("decrease") && item.quantity > 1) {
+    item.quantity -= 1;
   }
 
-  // Function to update quantity and total price
-  function updateQuantity(event) {
-    if (event.target.type === "number") {
-      let index = event.target.getAttribute("data-index");
-      cart[index].quantity = parseInt(event.target.value);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
-  }
-
-  // Function to remove item from cart
-  function removeItem(event) {
-    if (event.target.classList.contains("remove-item")) {
-      let index = event.target.getAttribute("data-index");
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
-  }
-
-  // Load cart when cart page is open
-  if (document.getElementById("cart-items")) {
-    renderCart();
-    document.addEventListener("change", updateQuantity);
-    document.addEventListener("click", removeItem);
-  }
-
-  // Function to add items to cart from shop page
-  document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", function (event) {
-      event.preventDefault();
-      let productElement = this.closest(".pro");
-      let id = productElement.getAttribute("data-id");
-      let name = productElement.getAttribute("data-name");
-      let price = parseFloat(productElement.getAttribute("data-price"));
-      let image = productElement.getAttribute("data-image");
-
-      if (isNaN(price) || !name || !image || !id) {
-        alert("Invalid product data!");
-        return;
-      }
-
-      let existingItem = cart.find((item) => item.id === id);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cart.push({ id, name, price, image, quantity: 1 });
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${name} added to cart!`);
+  try {
+    await fetch(`http://localhost:5000/cart/${productId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quantity: item.quantity }),
     });
-  });
+    loadCartItems();
+  } catch (error) {
+    console.error("Error updating quantity:", error);
+  }
+}
 
-  // Checkout function
-  window.checkout = function () {
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-    } else {
-      alert("Proceeding to checkout!");
-      localStorage.removeItem("cart"); // Clear cart after checkout
-      renderCart();
-    }
-  };
-});
+// Function to remove an item from cart in MongoDB
+async function removeItem(event) {
+  const productId = event.target.getAttribute("data-id");
+
+  try {
+    await fetch(`http://localhost:5000/cart/${productId}`, {
+      method: "DELETE",
+    });
+    loadCartItems();
+  } catch (error) {
+    console.error("Error removing item:", error);
+  }
+}
+
+// Function for checkout (example action)
+function checkout() {
+  alert("Proceeding to checkout...");
+}
