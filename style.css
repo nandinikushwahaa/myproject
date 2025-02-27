@@ -52,15 +52,13 @@ p {
   transition: 0.25s;
 }
 .section-p1 button {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 11px 18px;
-  color: #fff;
-  background-color: transparent;
+  background-color: red; /* Red color for visibility */
+  color: white; /* White text */
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
   cursor: pointer;
-  border: 1px solid #fff;
-  outline: none;
-  transition: 0.2s;
+  border-radius: 5px;
 }
 body {
   width: 100%;
@@ -826,4 +824,19 @@ footer .copyright {
 }
 #header .logo {
   height: 90px;
+}
+/* Style for remove button */
+.remove-item {
+  background-color: red; /* Red color for visibility */
+  color: white; /* White text */
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Hover effect */
+.remove-item:hover {
+  background-color: darkred;
 }
