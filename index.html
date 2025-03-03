@@ -14,11 +14,11 @@
     <script defer src="script.js"></script>
   </head>
   <body>
+    <!-- Header Section -->
     <section id="header">
-      <a href="index.html"
-        ><img src="shopping-removebg-preview.png" class="logo" alt="Logo"
-      /></a>
-
+      <a href="index.html">
+        <img src="shopping-removebg-preview.png" class="logo" alt="Logo" />
+      </a>
       <div>
         <ul id="navbar">
           <li><a class="active" href="index.html">Home</a></li>
@@ -27,11 +27,62 @@
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li>
-            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i> </a>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
+          <li>
+            <a href="#" id="login-btn"
+              ><i class="fa-solid fa-user"></i> Login</a
+            >
+          </li>
+          <li>
+            <a href="#" id="logout-btn" style="display: none"
+              ><i class="fa-solid fa-sign-out-alt"></i> Logout</a
+            >
           </li>
         </ul>
       </div>
     </section>
+
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <!-- Login Form -->
+        <div id="login-form">
+          <h2>Login</h2>
+          <input type="email" id="login-email" placeholder="Email" required />
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Password"
+            required
+          />
+          <button id="login-submit">Login</button>
+          <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+        </div>
+
+        <!-- Signup Form (Hidden by Default) -->
+        <div id="signup-form" style="display: none">
+          <h2>Sign Up</h2>
+          <input
+            type="text"
+            id="signup-name"
+            placeholder="Full Name"
+            required
+          />
+          <input type="email" id="signup-email" placeholder="Email" required />
+          <input
+            type="password"
+            id="signup-password"
+            placeholder="Password"
+            required
+          />
+          <button id="signup-submit">Sign Up</button>
+          <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+        </div>
+      </div>
+    </div>
 
     <section id="hero">
       <h4>Trade-in-offer</h4>

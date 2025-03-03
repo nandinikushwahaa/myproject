@@ -13,11 +13,11 @@
     <script defer src="script.js"></script>
   </head>
   <body>
+    <!-- Header Section -->
     <section id="header">
       <a href="index.html">
         <img src="shopping-removebg-preview.png" class="logo" alt="Logo" />
       </a>
-
       <div>
         <ul id="navbar">
           <li><a href="index.html">Home</a></li>
@@ -34,10 +34,13 @@
       </div>
     </section>
 
+    <!-- Cart Page Header -->
     <section id="page-header" class="about-header">
       <h2>#Let's_talk</h2>
       <p>LEAVE A MESSAGE, we love to hear from you</p>
     </section>
+
+    <!-- Cart Section -->
     <section id="cart" class="section-p1">
       <table width="100%">
         <thead>
@@ -50,10 +53,13 @@
             <td>Subtotal</td>
           </tr>
         </thead>
-        <tbody id="cart-items"></tbody>
+        <tbody id="cart-items">
+          <!-- Cart items will be dynamically loaded here -->
+        </tbody>
       </table>
     </section>
 
+    <!-- Cart Totals -->
     <section id="cart-add" class="section-p1">
       <div id="subtotal">
         <h3>Cart Totals</h3>
@@ -74,45 +80,44 @@
         <button class="normal" onclick="checkout()">Proceed to Checkout</button>
       </div>
     </section>
+    <!-- Newsletter -->
+    <section id="newsletter" class="section-p1 section-m1">
+      <div class="newstext">
+        <h4>Sign Up for Newsletters</h4>
+        <p>
+          Get email updates about our latest shop and
+          <span>special offers.</span>
+        </p>
+      </div>
+      <div class="form">
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email address"
+          required
+        />
+        <button class="normal" type="submit">Sign Up</button>
+      </div>
+    </section>
 
+    <!-- Footer -->
     <footer class="section-p1">
       <div class="col">
-        <img class="logo" src="img/logo.png" alt="" />
+        <img class="logo" src="img/logo.png" alt="Company Logo" />
         <h4>Contact</h4>
         <p>
           <strong>Address:</strong> Panvel, Wavanje, Enkay Garden, Ziniya 8,004
         </p>
         <p><strong>Phone:</strong> (+91) 81 0489 9602</p>
         <p><strong>Hours:</strong> 10:00-18:00, Mon-Sat</p>
-        <div class="follow">
-          <h4>Follow us</h4>
-          <div class="icon">
-            <a href="https://www.facebook.com/"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.instagram.com/"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a href="https://in.pinterest.com/"
-              ><i class="fab fa-pinterest-p"></i
-            ></a>
-            <a href="https://www.youtube.com/"
-              ><i class="fab fa-youtube"></i
-            ></a>
-          </div>
-        </div>
       </div>
-
       <div class="col">
         <h4>About</h4>
         <a href="#">About Us</a>
-        <a href="#">Delivery Information</a>
         <a href="#">Privacy Policy</a>
         <a href="#">Terms & Conditions</a>
         <a href="#">Contact Us</a>
       </div>
-
       <div class="col">
         <h4>My Account</h4>
         <a href="#">Sign In</a>
@@ -121,20 +126,18 @@
         <a href="#">Track My Order</a>
         <a href="#">Help</a>
       </div>
-
       <div class="col install">
         <h4>Install App</h4>
         <p>From App Store or Google Play</p>
         <div class="row">
-          <img src="apple.jpeg" alt="" />
-          <img src="google.png" alt="" />
+          <img src="apple.jpeg" alt="Apple Store" />
+          <img src="google.png" alt="Google Play" />
         </div>
         <p>Secured Payment Gateways</p>
-        <img src="visa.webp" alt="" />
+        <img src="visa.webp" alt="Payment Options" />
       </div>
-
       <div class="copyright">
-        <p>© 2021, Tech2 etc HTML CSS Ecommerce Template</p>
+        <p>© 2025, Your E-commerce Store</p>
       </div>
     </footer>
 
