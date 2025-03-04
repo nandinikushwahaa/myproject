@@ -1,43 +1,81 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // ✅ Check authentication status and update UI
+  const modal = document.getElementById("auth-modal");
+  const closeBtn = document.querySelector(".close");
+
+  // ✅ Ensure the modal is hidden by default on page load
+  if (modal) modal.style.display = "none";
+
+  // ✅ Check Authentication Status and Update UI on Page Load
   function checkAuthStatus() {
     const token = localStorage.getItem("token");
     const loginBtn = document.getElementById("login-btn");
     const logoutBtn = document.getElementById("logout-btn");
+    const userInfo = document.getElementById("user-info");
+    const usernameDisplay = document.getElementById("username");
 
-    if (loginBtn && logoutBtn) {
+    if (loginBtn && logoutBtn && userInfo && usernameDisplay) {
       if (token) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.name) {
+          usernameDisplay.innerText = user.name;
+          userInfo.style.display = "inline-block";
+        }
         loginBtn.style.display = "none";
         logoutBtn.style.display = "inline-block";
       } else {
+        userInfo.style.display = "none";
         loginBtn.style.display = "inline-block";
         logoutBtn.style.display = "none";
       }
     }
   }
 
-  // ✅ Handle Modal Open/Close
-  const authModal = document.getElementById("auth-modal");
-  const closeModal = document.querySelector(".close");
-
+  // ✅ Open Modal on Login Button Click
   if (document.getElementById("login-btn")) {
     document
       .getElementById("login-btn")
       .addEventListener("click", function (e) {
         e.preventDefault();
-        authModal.style.display = "block";
+        if (modal) modal.style.display = "flex"; // Open the modal only on button click
       });
   }
 
-  if (closeModal) {
-    closeModal.addEventListener("click", function () {
-      authModal.style.display = "none";
-    });
+  // ✅ Show Signup Form
+  if (document.getElementById("show-signup")) {
+    document
+      .getElementById("show-signup")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("signup-form").style.display = "block";
+      });
   }
 
+  // ✅ Show Login Form
+  if (document.getElementById("show-login")) {
+    document
+      .getElementById("show-login")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("signup-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+      });
+  }
+
+  // ✅ Close Modal Function
+  function closeModal() {
+    if (modal) modal.style.display = "none";
+  }
+
+  // ✅ Close Modal on Click of 'X'
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeModal);
+  }
+
+  // ✅ Close Modal on Clicking Outside
   window.addEventListener("click", function (event) {
-    if (event.target === authModal) {
-      authModal.style.display = "none";
+    if (event.target === modal) {
+      closeModal();
     }
   });
 
@@ -68,12 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
           let data = await response.json();
 
-          if (data.token) {
+          if (data.token && data.user) {
             localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user)); // Store user info
             alert("Login Successful!");
-            authModal.style.display = "none";
-            checkAuthStatus();
-            loadCartItems();
+            closeModal(); // Close the modal after successful login
+            checkAuthStatus(); // Update UI based on authentication status
+            loadCartItems(); // Reload cart items
           } else {
             alert("Login Failed: " + (data.message || "Invalid credentials"));
           }
@@ -114,8 +153,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (data.message === "User registered successfully") {
             alert("Signup Successful! Please log in.");
-            document.getElementById("login-form").style.display = "block";
-            document.getElementById("signup-form").style.display = "none";
+
+            // Show the login form and hide the signup form
+            if (document.getElementById("login-form")) {
+              document.getElementById("login-form").style.display = "block";
+            }
+            if (document.getElementById("signup-form")) {
+              document.getElementById("signup-form").style.display = "none";
+            }
+
+            // Clear the signup form fields
+            document.getElementById("signup-name").value = "";
+            document.getElementById("signup-email").value = "";
+            document.getElementById("signup-password").value = "";
+
+            // Do not log in the user automatically
+            // Remove any existing token or user data from localStorage
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            // Update the UI to reflect the logged-out state
+            checkAuthStatus();
           } else {
             alert("Signup Failed: " + (data.message || "Unknown error"));
           }
@@ -133,13 +191,14 @@ document.addEventListener("DOMContentLoaded", function () {
       .addEventListener("click", function (e) {
         e.preventDefault();
         localStorage.removeItem("token");
+        localStorage.removeItem("user"); // Remove user info
         alert("Logged out successfully!");
-        checkAuthStatus();
-        loadCartItems();
+        checkAuthStatus(); // Update UI based on authentication status
+        loadCartItems(); // Reload cart items
       });
   }
 
-  // ✅ Add to Cart Functionality (Ensure Listeners Are Attached Only Once)
+  // ✅ Add to Cart Functionality
   const addToCartButtons = document.querySelectorAll(".add-to-cart");
   addToCartButtons.forEach((button) => {
     button.removeEventListener("click", handleAddToCart); // Remove existing listeners to avoid duplicates
@@ -147,7 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // ✅ Initial Checks
-  checkAuthStatus();
+  checkAuthStatus(); // Check authentication status on page load
+  loadCartItems(); // Load cart items on page load
 });
 
 // ✅ Handle Add to Cart
@@ -362,6 +422,3 @@ function attachCartEventListeners() {
     });
   });
 }
-
-// ✅ Initial Load
-loadCartItems();
